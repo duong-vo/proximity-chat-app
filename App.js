@@ -16,8 +16,18 @@ export default function App() {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      const locationSubscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 1000, // update every 5 seconds
+          distanceInterval: 0.1, // update when the user moves 100 meters
+        },
+        location => {
+          console.log(location.coords.latitude, location.coords.longitude);
+          // do something with the updated location data
+          setLocation(location);
+        }
+      );
     })();
   }, []);
 
@@ -29,8 +39,9 @@ export default function App() {
   }
 
   return (
-    <View >
-      <Text>{text}</Text>
+    
+    <View>
+      <Text>{"\n\n\n\n" + text}</Text>
     </View>
   );
 }
